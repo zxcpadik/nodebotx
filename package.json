@@ -1,0 +1,59 @@
+{
+  "name": "@zxcpadik/nodebotx",
+  "version": "1.0.0",
+  "description": "TypeScript client for Express.ms BotX API platform",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "botx",
+    "express.ms",
+    "chatbot",
+    "api-client",
+    "typescript",
+    "corporate-messenger"
+  ],
+  "author": "zxcpadik",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zxcpadik/nodebotx.git"
+  },
+  "homepage": "https://github.com/zxcpadik/nodebotx#readme",
+  "bugs": {
+    "url": "https://github.com/zxcpadik/nodebotx/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/node-fetch": "^2.6.13",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "formdata-node": "^6.0.3",
+    "node-fetch": "^3.3.2"
+  },
+  "peerDependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

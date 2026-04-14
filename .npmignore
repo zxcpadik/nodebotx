@@ -1,0 +1,40 @@
+# Source files (not needed in published package)
+src/
+*.ts
+*.tsx
+
+# Build artifacts (except dist/)
+!dist/
+dist/**/*.map
+
+# Development files
+node_modules/
+.npm/
+npm-debug.log*
+.yarn/
+.pnpm/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test files
+tests/
+*.test.ts
+*.spec.ts
+coverage/
+
+# Config files not needed at runtime
+tsconfig.json
+.eslintrc*
+.prettierrc*
+.editorconfig
+.gitignore
+
+# Documentation source (keep README)
+docs/
+*.md
+!README.md
+!LICENSE
