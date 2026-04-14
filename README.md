@@ -1,6 +1,6 @@
 # nodebotx
 
-TypeScript client for [Express.ms](https://express.ms) [BotX API](https://docs.express.ms) platform.
+TypeScript client for [eXpress.ms](https://express.ms) [BotX API](https://docs.express.ms) platform.
 
 ## Installation
 
