@@ -42,4 +42,4 @@ eXpress.ms API reference: https://hackmd.ccsteam.ru/PZJXHXPSRie_GCJIIk0e9w
 
 ## License
 
-[ISC](LICENSE)
+[ISC](LICENSE.md)
