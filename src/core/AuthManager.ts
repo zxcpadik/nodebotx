@@ -40,10 +40,10 @@ export class AuthManager {
    */
   get_authorization_header(): string {
     const now = Math.floor(Date.now() / 1000);
-    if (!this.current_token || !this.token_expires_at || now >= this.token_expires_at) {
-      return `Bearer ${this.generate_token()}`;
+    if (!this.current_token || !this.token_expires_at || now >= (this.token_expires_at - 10000)) {
+      return this.generate_token();
     }
-    return `Bearer ${this.current_token}`;
+    return this.current_token;
   }
 
   /**

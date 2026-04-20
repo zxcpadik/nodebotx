@@ -133,3 +133,6 @@ export {
   type FileUploadRequest,
   type FileUploadFormFields,
 } from './modules/files/types';
+
+export { Router, BotContext, WebhookHandler, WebhookServer } from './webhook';
+export type { IncomingWebhookPayload, IncomingSender, IncomingCommand, IncomingAttachment, WebhookHandlerFn } from './webhook';
