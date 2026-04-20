@@ -20,10 +20,8 @@ export class WebhookServer {
     });
   }
 
-  start(): void {
-    this.server.listen(this.port, this.listen_addr, () => {
-      console.log(`BotX Webhook Server listening at ${this.listen_addr}:${this.port} at ${this.path}`);
-    });
+  start(cb?: () => void): void {
+    this.server.listen(this.port, this.listen_addr, cb);
   }
 
   stop(): Promise<void> {

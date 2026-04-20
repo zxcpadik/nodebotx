@@ -1,6 +1,6 @@
 {
   "name": "@zxcpadik/nodebotx",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TypeScript client for Express.ms BotX API platform",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
