@@ -92,6 +92,20 @@ export class BotContext {
     return this.client.notifications.send_direct(payload);
   }
 
+  async reply_with_bubble(keyboard: Button[][], text: string, opts?: { metadata?: Record<string, unknown>; message_opts?: MessageOpts }): Promise<{ sync_id: UUID }> {
+    const payload: DirectNotificationRequest = {
+      group_chat_id: this.chat_id,
+      notification: {
+        status: 'ok',
+        body: text,
+        bubble: keyboard,
+        metadata: opts?.metadata,
+        opts: opts?.message_opts ?? { silent_response: false },
+      },
+    };
+    return this.client.notifications.send_direct(payload);
+  }
+
   async edit(text: string, opts?: MessageOpts): Promise<void> {
     await this.client.events.edit_event({
       sync_id: this.payload.sync_id,
