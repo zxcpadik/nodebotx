@@ -9,6 +9,11 @@ export class BotContext {
   constructor(payload: IncomingWebhookPayload, client: BotXClient) {
     this.payload = payload;
     this.client = client;
+
+    const trimmed = this.text.trim();
+    if (!trimmed.startsWith('/')) this.command_args = [];
+    const args = trimmed.slice(1).split(/\s+/);
+    this.command_args = args.length > 1 ? args.slice(1) : [];
   }
 
   get chat_id(): UUID {
@@ -43,12 +48,7 @@ export class BotContext {
     return cmd.toLowerCase();
   }
 
-  get command_args(): string[] {
-    const trimmed = this.text.trim();
-    if (!trimmed.startsWith('/')) return [];
-    const args = trimmed.slice(1).split(/\s+/);
-    return args.length > 1 ? args.slice(1) : [];
-  }
+  public command_args: string[];
 
   async reply(text: string, opts?: { metadata?: Record<string, unknown>; message_opts?: MessageOpts; notification_opts?: NotificationOpts }): Promise<{ sync_id: UUID }> {
     const payload: DirectNotificationRequest = {
