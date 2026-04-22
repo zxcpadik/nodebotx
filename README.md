@@ -15,7 +15,7 @@ yarn add nodebotx
 ## Quick Start
 
 ```typescript
-import { BotXClient } from 'nodebotx';
+import { BotXClient } from '@zxcpadik/nodebotx';
 
 const client = new BotXClient({
   bot_id: 'your-bot-uuid',

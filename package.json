@@ -1,6 +1,6 @@
 {
   "name": "@zxcpadik/nodebotx",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "TypeScript client for Express.ms BotX API platform",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,6 +17,9 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "pnpm run build",
