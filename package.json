@@ -1,6 +1,6 @@
 {
   "name": "@zxcpadik/nodebotx",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "TypeScript client for Express.ms BotX API platform",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -46,14 +46,10 @@
   "packageManager": "pnpm@10.33.0",
   "devDependencies": {
     "@types/node": "^25.6.0",
-    "@types/node-fetch": "^2.6.13",
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "formdata-node": "^6.0.3",
-    "node-fetch": "^3.3.2"
-  },
-  "peerDependencies": {
-    "node-fetch": "^3.3.2"
+    "axios": "^1.15.2",
+    "formdata-node": "^6.0.3"
   }
 }

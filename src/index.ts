@@ -75,7 +75,6 @@ export {
 
 export {
   format_mention_placeholder,
-  validate_edit_payload_rules,
   type EditEventPayload,
   type ReplyEventPayload,
   type ReplyEventResponse,

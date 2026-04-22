@@ -1,10 +1,12 @@
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import * as http from 'http';
+import * as https from 'https';
 import { AUTH, HEADERS } from '../config/constants';
 import { AuthManager } from './AuthManager';
 import { create_api_error } from '../errors/BotXError';
 import type { ResolvedBotXConfig } from '../config/BotXConfig';
 import type { APIResponse, RequestOptions, MultipartField } from '../types/api';
 import type { HttpMethod } from '../types/common';
-import { BodyInit } from 'node-fetch';
 
 /**
  * Handles HTTP request construction, execution, and response processing for BotX API
@@ -14,6 +16,9 @@ export class RequestHandler {
   private readonly auth_manager: AuthManager;
   private readonly default_timeout_ms: number;
   private readonly custom_headers: Record<string, string>;
+  private readonly http_agent: http.Agent;
+  private readonly https_agent: https.Agent;
+  private readonly axios_instance: AxiosInstance;
 
   /**
    * Create new request handler instance
@@ -25,6 +30,17 @@ export class RequestHandler {
     this.auth_manager = auth_manager;
     this.default_timeout_ms = config.timeout_ms;
     this.custom_headers = config.custom_headers;
+    
+    // Create keep-alive HTTP agents
+    this.http_agent = new http.Agent({ keepAlive: true });
+    this.https_agent = new https.Agent({ keepAlive: true });
+    
+    // Create axios instance with default configuration
+    this.axios_instance = axios.create({
+      httpAgent: this.http_agent,
+      httpsAgent: this.https_agent,
+      validateStatus: () => true,
+    });
   }
 
   /**
@@ -50,17 +66,17 @@ export class RequestHandler {
    * @param content_type - MIME type for request body
    * @param use_auth - Include Authorization header
    * @param extra_headers - Additional custom headers
-   * @returns Headers object for fetch request
+   * @returns Headers object for axios request
    */
-  private build_headers(content_type: string, use_auth: boolean, extra_headers?: Record<string, string>): Headers {
-    const headers = new Headers({
+  private build_headers(content_type: string, use_auth: boolean, extra_headers?: Record<string, string>): Record<string, string> {
+    const headers: Record<string, string> = {
       'content-type': content_type,
       ...this.custom_headers,
       ...extra_headers,
-    });
+    };
 
     if (use_auth) {
-      headers.set(AUTH.AUTH_HEADER_NAME, `${AUTH.AUTH_HEADER_PREFIX}${this.auth_manager.get_authorization_header()}`);
+      headers[AUTH.AUTH_HEADER_NAME] = `${AUTH.AUTH_HEADER_PREFIX}${this.auth_manager.get_authorization_header()}`;
     }
 
     return headers;
@@ -94,20 +110,25 @@ export class RequestHandler {
     const timeout_id = setTimeout(() => controller.abort(), timeout_ms);
 
     try {
-      const response = await fetch(url, {
+      const axios_config: AxiosRequestConfig = {
         method,
+        url,
         headers,
         //@ts-ignore
-        body: (body ? (content_type === HEADERS.CONTENT_TYPE_JSON ? JSON.stringify(body) as BodyInit : body as BodyInit) : undefined),
+        data: (body ? (content_type === HEADERS.CONTENT_TYPE_JSON ? JSON.stringify(body) : body) : undefined),
+        timeout: timeout_ms,
         signal: controller.signal,
-      });
+        responseType: 'text',
+      };
+
+      const response = await this.axios_instance.request(axios_config);
 
       clearTimeout(timeout_id);
 
-      const response_text = await response.text();
+      const response_text = response.data as string;
       const response_data = response_text ? JSON.parse(response_text) : {};
 
-      if (!response.ok) {
+      if (response.status < 200 || response.status >= 300) {
         const error_reason = response_data.reason || `http_${response.status}`;
         const error_message = response_data.error_data?.error_description || response.statusText;
         throw create_api_error(error_reason, error_message, response_data.error_data);
@@ -116,7 +137,7 @@ export class RequestHandler {
       return response_data as APIResponse<TResponse>;
     } catch (error) {
       clearTimeout(timeout_id);
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (axios.isAxiosError(error) && (error.code === 'ECONNABORTED' || error.message?.includes('timeout') || error.message?.includes('aborted'))) {
         throw create_api_error('timeout', `Request timeout after ${timeout_ms}ms`);
       }
       if (error instanceof Error && error.name !== 'BotXError') {

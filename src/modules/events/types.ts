@@ -79,20 +79,6 @@ export interface EventStatusQuery {
 }
 
 /**
- * Validate edit payload field update rules
- * @param payload - Edit event payload to validate
- * @throws Error if invalid update pattern detected
- */
-export function validate_edit_payload_rules(payload: EditEventPayload): void {
-  if (payload.payload.mentions && payload.payload.body) {
-    console.warn('Updating both mentions and body: existing mentions will be replaced in text');
-  }
-  if (payload.payload.keyboard?.length == 0 || payload.payload.bubble?.length == 0 || payload.payload.mentions?.length == 0) {
-    console.warn('Empty array provided: corresponding field will be cleared');
-  }
-}
-
-/**
  * Format mention placeholder for message body insertion
  * @param mention_id - UUID of mentioned entity
  * @param mention_type - Type: user, chat, channel, contact, or all

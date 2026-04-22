@@ -1,5 +1,4 @@
 import { API_ENDPOINTS } from '../../config/constants';
-import { validate_edit_payload_rules } from './types';
 import type { BotXClient } from '../../core/BotXClient';
 import type { UUID } from '../../types/common';
 import type {
@@ -31,8 +30,6 @@ export class EventsAPI {
    * @returns Void on success (async processing)
    */
   async edit_event(payload: EditEventPayload): Promise<void> {
-    validate_edit_payload_rules(payload);
-    
     await this.client.request<void, EditEventPayload>(
       'POST',
       API_ENDPOINTS.EVENTS.EDIT,
